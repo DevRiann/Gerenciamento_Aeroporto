@@ -107,7 +107,7 @@ public class Aeroporto
     public static void cadastrar()
     {
         System.out.println("Cadastrando um novo Voo");
-        int numeroVoo = Utils.gerarNumeroUnico(1000, 9999);
+        int numeroVoo = Utils.gerarNumeroUnico(100, 9999);
         String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ");
         LocalTime embarque = Utils.lerHorario(teclado, "Digite o Horario de Embarque (no formato HH:mm): ");
         LocalTime desembarque = Utils.lerHorario(teclado, "Digite o Horario de Desembarque (no formato HH:mm): ");
