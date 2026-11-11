@@ -128,6 +128,110 @@ public class Aeroporto
         painel();
     }
 
+    // ---------------------------------------------------------------
+    // LISTAR VOOS
+    // Exibe todos os voos cadastrados em formato de tabela
+    // ---------------------------------------------------------------
+    public static void listarVoos()
+    {
+        // Se a lista estiver vazia, avisa e volta ao menu
+        if (PainelAeroporto.isEmpty())
+        {
+            System.out.println("Nenhum voo cadastrado no momento.");
+            Utils.pausar(2);
+            menu();
+            return; // evita continuar o metodo depois de chamar o menu
+        }
+
+        // Cabecalho do painel
+        System.out.println("--------------------------");
+        System.out.println("| AEROPORTO DE SAO PAULO |");
+        System.out.println("--------------------------");
+        System.out.println();
+
+        // Usa a constante "formato" para manter as colunas alinhadas
+        System.out.printf(formato, "ID", "COMPANHIA AEREA", "EMBARQUE", "DESEMBARQUE", "DESTINO", "STATUS");
+
+        // Percorre a lista e imprime uma linha para cada voo
+        for (Voo voo : PainelAeroporto)
+        {
+            System.out.printf(formato, voo.getNumeroVoo(), voo.getCompanhia(),
+                Utils.timeParaString(voo.getEmbarque()), Utils.timeParaString(voo.getDesembarque()),
+                voo.getDestino(), voo.getStatus());
+        }
+
+        System.out.println();
+        System.out.println("Total de voos: " + PainelAeroporto.size());
+        System.out.println("Pressione [Enter] para voltar ao Menu");
+        teclado.nextLine(); // espera o usuario apertar Enter
+        menu();
+    }
+
+
+
+    public static Voo localizarVoo(int numeroVoo)
+    {
+        for (Voo voo : PainelAeroporto)
+        {
+            // Compara int com int, entao usamos == (nao precisa de equals)
+            if (voo.getNumeroVoo() == numeroVoo)
+            {
+                return voo; // achou: devolve o voo e encerra o metodo
+            }
+        }
+        return null; // percorreu tudo e nao achou
+    }
+
+
+    // ---------------------------------------------------------------
+    // BUSCAR VOOS
+    // Procura o voo pelo numero de ID
+    // ---------------------------------------------------------------
+    public static void buscarVoos()
+    {
+        System.out.println("Consultar Voo");
+        int numero;
+
+        // Tratamento de erro caso o usuario digite letras no lugar do numero
+        try
+        {
+            // lerString garante que o campo nao fique vazio; trim remove espacos
+            numero = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Numero invalido! Consulta nao realizada.");
+            Utils.pausar(2);
+            menu();
+            return;
+        }
+
+        // Usa o metodo auxiliar para procurar o voo na lista
+        Voo voo = localizarVoo(numero);
+
+        if (voo == null)
+        {
+            // Regra de negocio: informar quando o voo nao existe
+            System.out.println("Voo " + numero + " nao encontrado. Consulta nao realizada.");
+        }
+        else
+        {
+            // Mostra todas as informacoes do voo encontrado
+            System.out.println("--------------------------");
+            System.out.println("Numero do voo:       " + voo.getNumeroVoo());
+            System.out.println("Companhia aerea:     " + voo.getCompanhia());
+            System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()));
+            System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()));
+            System.out.println("Destino:             " + voo.getDestino());
+            System.out.println("Status:              " + voo.getStatus());
+            System.out.println("--------------------------");
+            System.out.println("Consulta realizada com sucesso!");
+        }
+
+        Utils.pausar(2);
+        menu();
+    }
+
     
 }
 
