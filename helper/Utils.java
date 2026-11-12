@@ -32,7 +32,7 @@ public class Utils
         }
     }
 
-    // Geracao de numero aleatorio para a identificao do voo
+    // Geracao de numero aleatorio para a identificao do voo, com uma validação para não repetição
     public static int gerarNumeroUnico(int min, int max)
     {
         int numero;
@@ -80,6 +80,7 @@ public class Utils
         return texto;
     }
 
+    // Metodo para pausar o programa em alguns segundos
     public static void pausar(int segundos)
     {
         try {
