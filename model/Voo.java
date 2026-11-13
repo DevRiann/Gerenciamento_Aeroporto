@@ -11,7 +11,8 @@ public class Voo
     private LocalTime embarque;
     private LocalTime desembarque;
     private String destino;
-    private String status;
+    private static final String[] status = {"previsto", "confirmado", "embarque em curso", "embarque encerrado", "decolou"};
+    private int posicaoStatus;
 
     public Voo (int numeroVoo, String companhia, LocalTime embarque, LocalTime desembarque, String destino)
     {
@@ -20,7 +21,7 @@ public class Voo
         this.embarque = embarque;
         this.desembarque = desembarque;
         this.destino = destino;
-        this.status = "previsto";
+        this.posicaoStatus = 0;
     }
     
     
@@ -42,11 +43,8 @@ public class Voo
     public String getDestino() {
         return destino;
     }
-    public void setStatus(String status) {
-        this.status = status;
-    }
     public String getStatus() {
-        return status;
+        return status[posicaoStatus];
     }
     public void setEmbarque(LocalTime embarque) {
         this.embarque = embarque;
@@ -59,6 +57,12 @@ public class Voo
     }
     public LocalTime getDesembarque() {
         return desembarque;
+    }
+    public void setPosicaoStatus(int posicaoStatus) {
+        this.posicaoStatus = posicaoStatus;
+    }
+    public int getPosicaoStatus() {
+        return posicaoStatus;
     }
 
     @Override

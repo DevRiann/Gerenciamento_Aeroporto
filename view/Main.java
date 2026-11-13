@@ -43,7 +43,7 @@ public class Main
             switch (opcao) 
             {
                 case 1:
-                    telaCadastrar();
+                    cadastrarVoos();
                     break;
                 case 2:
                     listarVoos();
@@ -52,16 +52,17 @@ public class Main
                     buscarVoos();
                     break;
                 case 4:
-                    // atualizarVoo();
+                    atualizarVoos();
                     break;
                 case 5: 
-                    // atualizarStatus();
+                    atualizarStatusVoos();
                     break;
                 case 6:
-                    // deletarVoo();
+                    // deletarVoos();
                     break;
                 case 7:
                     System.out.println("Volte Sempre!!");
+                    System.out.println();
                     break;
                 default:
                     System.out.println("Opcao Invalida, tente novamente");
@@ -71,8 +72,9 @@ public class Main
         } while (opcao != 7);
     }
 
-    public static void telaCadastrar()
+    public static void cadastrarVoos()
     {
+        System.out.println();
         System.out.println("Cadastrando um novo Voo");
         int numeroVoo = Utils.gerarNumeroUnico(100, 9999); // Gera uma combinação aleatória de numeros, não sendo possível repetir números;
         String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ");
@@ -81,7 +83,7 @@ public class Main
 
         while (desembarque.isBefore(embarque) || desembarque.equals(embarque)) 
         {
-            System.out.println("O Horario de Desembarque esta inferior ou igual ao Horario de Embarque");
+            System.out.println("Erro: O Horario de Desembarque esta inferior ou igual ao Horario de Embarque");
             desembarque = Utils.lerHorario(teclado, "Digite o Horario de Desembarque (no formato HH:mm): ");    
         }
 
@@ -127,14 +129,15 @@ public class Main
 
     public static void buscarVoos()
     {
-        System.out.println("Consultar Voo");
-        int numero;
+        System.out.println();
+        System.out.println("CONSULTAR VOO");
+        int numeroVoo;
 
         // Tratamento de erro caso o usuario digite letras no lugar do numero
         try
         {
             // lerString garante que o campo nao fique vazio; trim remove espacos
-            numero = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
+            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
         }
         catch (NumberFormatException e)
         {
@@ -144,27 +147,114 @@ public class Main
         }
 
         // Usa o metodo auxiliar para procurar o voo na lista
-        Voo voo = Aeroporto.localizarVoo(numero);
+        Voo voo = Aeroporto.localizarVoo(numeroVoo);
 
         if (voo == null)
         {
             // Regra de negocio: informar quando o voo nao existe
-            System.out.println("Voo " + numero + " nao encontrado. Consulta nao realizada.");
+            System.out.println("Voo " + numeroVoo + " nao encontrado. Consulta nao realizada.");
         }
         else
         {
             // Mostra todas as informacoes do voo encontrado
             System.out.println("--------------------------");
             System.out.println("Numero do voo:       " + voo.getNumeroVoo());
-            System.out.println("Companhia aerea:     " + voo.getCompanhia());
-            System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()));
-            System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()));
-            System.out.println("Destino:             " + voo.getDestino());
-            System.out.println("Status:              " + voo.getStatus());
+            System.out.println("Companhia aerea:     " + voo.getCompanhia().toUpperCase());
+            System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()).toUpperCase());
+            System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
+            System.out.println("Destino:             " + voo.getDestino().toUpperCase());
+            System.out.println("Status:              " + voo.getStatus().toUpperCase());
             System.out.println("--------------------------");
             System.out.println("Consulta realizada com sucesso!");
         }
         Utils.pausar(2);
         return;
+    }
+
+    public static void atualizarVoos()
+    {
+        System.out.println();
+        System.out.println("Consultar Voo");
+        int numeroVoo;
+
+        try
+        {
+            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Erro: Caracter invalido");
+            Utils.pausar(2);
+            return;
+        }
+
+        String companhia = Utils.lerString(teclado, "Digite a nova Companhia Aerea: ");
+        LocalTime novoEmbarque = Utils.lerHorario(teclado, "Digite o novo Horario de Embarque (no formato HH:mm): ");
+        LocalTime novoDesembarque = Utils.lerHorario(teclado, "Digite o novo Horario de Desembarque (no formato HH:mm): ");
+
+        while (novoDesembarque.isBefore(novoEmbarque) || novoDesembarque.equals(novoEmbarque)) 
+        {
+            System.out.println("Erro: O Horario de Desembarque esta inferior ou igual ao Horario de Embarque");
+            novoDesembarque = Utils.lerHorario(teclado, "Digite o novo Horario de Desembarque (no formato HH:mm): ");    
+        }
+
+        String destino = Utils.lerString(teclado, "Digite o novo Destino: ");
+
+        // Valida o êxito da atualização do voo e exibe na tela
+        if (Aeroporto.atualizar(numeroVoo, companhia, Utils.timeParaString(novoEmbarque), Utils.timeParaString(novoDesembarque), destino)) 
+        {
+            System.out.println("Sucesso: Dados do voo " + numeroVoo + " atualizados com sucesso.");
+            
+        } 
+        else 
+        {
+            System.out.println("Erro: Nao foi possivel atualizar o voo numero: " + numeroVoo + ". Verifique novamente o numero e o status.");
+        }
+
+        Utils.pausar(2);
+        return;
+    }
+
+    public static void atualizarStatusVoos()
+    {
+        System.out.println("");
+        System.out.println("ATUALIZAR O STATUS DO VOO");
+        int numeroVoo;
+
+        try
+        {
+            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println("Erro: Caracter invalido");
+            Utils.pausar(2);
+            return;
+        }
+
+        Voo voo = Aeroporto.localizarVoo(numeroVoo);
+        if (voo == null)
+        {
+            System.out.println("Erro: Voo " + numeroVoo + " nao encontrado.");
+        }
+        else
+        {
+            System.out.println("Status atual do voo numero "+ numeroVoo +" : "+ voo.getStatus().toUpperCase());
+            System.out.println("Pressione [Enter] para atualizar o status");
+            teclado.nextLine(); 
+
+            if (Aeroporto.atualizarStatus(numeroVoo)) 
+            {
+                System.out.println("Status atualizado com sucesso!! \nStatus atual: "+voo.getStatus().toUpperCase());
+            } 
+            else
+            {
+                System.out.println("Erro: O voo já está no status máximo (DECOLOU) e não pode avançar.");
+            } 
+        }
+        
+        Utils.pausar(2);
+        return;
+
     }
 }
