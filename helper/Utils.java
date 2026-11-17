@@ -3,16 +3,11 @@ package helper;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;   
+import java.util.Scanner; 
 import java.util.concurrent.TimeUnit;
 
 public class Utils 
 {
-    private static Random rand = new Random();
-    private static Set<Integer> usados = new HashSet<>();
     static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
     
     // Conversão de horário para string
@@ -32,17 +27,6 @@ public class Utils
         }
     }
 
-    // Geracao de numero aleatorio para a identificao do voo, com uma validação para não repetição
-    public static int gerarNumeroUnico(int min, int max)
-    {
-        int numero;
-        do {
-            numero = rand.nextInt(max - min) + min;
-        } while (usados.contains(numero));
-
-        usados.add(numero);
-        return numero;
-    }
 
     // Validacao de entrada para horario
     public static LocalTime lerHorario(Scanner entrada, String pergunta)
@@ -66,16 +50,15 @@ public class Utils
     public static String lerString(Scanner entrada, String pergunta)
     {
         String texto = "";
-        while (texto.isEmpty()) 
+        while (texto.isBlank())
         {
             System.out.print(pergunta);
-            texto = entrada.nextLine();
-
-            if(texto.isEmpty() )
+            texto = entrada.nextLine().trim();
+        
+            if (texto.isBlank())
             {
                 System.out.println("Campo obrigatorio!! Insira algum dado");
             }
-            
         }
         return texto;
     }

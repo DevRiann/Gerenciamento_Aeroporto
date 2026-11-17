@@ -33,24 +33,23 @@ public class Aeroporto
     // BUSCAR VOOS
     // Procura o voo pelo numero de ID
     // ---------------------------------------------------------------
-    public static Voo localizarVoo(int numeroVoo)
+    public static Voo localizarVoo(String numeroVoo)
     {
         for (Voo voo : voos)
         {
-            // Compara int com int, entao usamos == (nao precisa de equals)
-            if (voo.getNumeroVoo() == numeroVoo)
+            if (voo.getNumeroVoo().equalsIgnoreCase(numeroVoo))
             {
-                return voo; // achou: devolve o voo e encerra o metodo
+                return voo;
             }
         }
-        return null; // percorreu tudo e nao achou
+        return null;
     }
     
     // ---------------------------------------------------------------
     // ATUALIZAR VOOS
     // Recebe os atributos do voo, faz uma busca do voo, verifica o status e tenta atualizar o voo
     // ---------------------------------------------------------------
-    public static boolean atualizar (int numero, String novaCompanhia, String novoEmbarque, String novoDesembarque, String novoDestino) {
+    public static boolean atualizar (String numero, String novaCompanhia, String novoEmbarque, String novoDesembarque, String novoDestino) {
         Voo voo = localizarVoo(numero);
         if (voo == null) {
             return false;
@@ -73,20 +72,14 @@ public class Aeroporto
     // ATUALIZAR O STATUS DO VOOS
     // Verifica o status atual e pula para o proximo status
     // ---------------------------------------------------------------
-    public static boolean atualizarStatus (int numeroVoo) {
-        
-        for (Voo voo : getVoos())
+    public static boolean atualizarStatus(String numeroVoo)
+    {
+        Voo voo = localizarVoo(numeroVoo);
+        if (voo == null)
         {
-            int proximoStatus = voo.getPosicaoStatus();
-            if (proximoStatus == voo.getStatus().length()-1) {
-                return false;
-            } 
-            else{
-                proximoStatus++;
-                voo.setPosicaoStatus(proximoStatus);
-            }
+            return false;
         }
-        return true;
+        return voo.avancarStatus();
     }
 }
 

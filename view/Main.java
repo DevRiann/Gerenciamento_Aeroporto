@@ -76,7 +76,11 @@ public class Main
     {
         System.out.println();
         System.out.println("Cadastrando um novo Voo");
-        int numeroVoo = Utils.gerarNumeroUnico(100, 9999); // Gera uma combinação aleatória de numeros, não sendo possível repetir números;
+        String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo (ex.: LA3456): ").trim().toUpperCase();
+        while (Aeroporto.localizarVoo(numeroVoo) != null){
+            System.out.println("Erro: ja existe um voo com o numero " + numeroVoo);
+            numeroVoo = Utils.lerString(teclado, "Digite outro numero de voo: ").trim().toUpperCase();
+        }
         String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ");
         LocalTime embarque = Utils.lerHorario(teclado, "Digite o Horario de Embarque (no formato HH:mm): ");
         LocalTime desembarque = Utils.lerHorario(teclado, "Digite o Horario de Desembarque (no formato HH:mm): ");
@@ -131,20 +135,7 @@ public class Main
     {
         System.out.println();
         System.out.println("CONSULTAR VOO");
-        int numeroVoo;
-
-        // Tratamento de erro caso o usuario digite letras no lugar do numero
-        try
-        {
-            // lerString garante que o campo nao fique vazio; trim remove espacos
-            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
-        }
-        catch (NumberFormatException e)
-        {
-            System.out.println("Numero invalido! Consulta nao realizada.");
-            Utils.pausar(2);
-            return;
-        }
+        String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim();
 
         // Usa o metodo auxiliar para procurar o voo na lista
         Voo voo = Aeroporto.localizarVoo(numeroVoo);
@@ -175,18 +166,7 @@ public class Main
     {
         System.out.println();
         System.out.println("Consultar Voo");
-        int numeroVoo;
-
-        try
-        {
-            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
-        }
-        catch (NumberFormatException e)
-        {
-            System.out.println("Erro: Caracter invalido");
-            Utils.pausar(2);
-            return;
-        }
+        String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim();
 
         String companhia = Utils.lerString(teclado, "Digite a nova Companhia Aerea: ");
         LocalTime novoEmbarque = Utils.lerHorario(teclado, "Digite o novo Horario de Embarque (no formato HH:mm): ");
@@ -215,22 +195,10 @@ public class Main
         return;
     }
 
-    public static void atualizarStatusVoos()
-    {
+    public static void atualizarStatusVoos(){
         System.out.println("");
         System.out.println("ATUALIZAR O STATUS DO VOO");
-        int numeroVoo;
-
-        try
-        {
-            numeroVoo = Integer.parseInt(Utils.lerString(teclado, "Digite o numero do voo: ").trim());
-        }
-        catch (NumberFormatException e)
-        {
-            System.out.println("Erro: Caracter invalido");
-            Utils.pausar(2);
-            return;
-        }
+        String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim();
 
         Voo voo = Aeroporto.localizarVoo(numeroVoo);
         if (voo == null)
@@ -238,20 +206,31 @@ public class Main
             System.out.println("Erro: Voo " + numeroVoo + " nao encontrado.");
         }
         else
-        {
-            System.out.println("Status atual do voo numero "+ numeroVoo +" : "+ voo.getStatus().toUpperCase());
-            System.out.println("Pressione [Enter] para atualizar o status");
-            teclado.nextLine(); 
-
-            if (Aeroporto.atualizarStatus(numeroVoo)) 
             {
-                System.out.println("Status atualizado com sucesso!! \nStatus atual: "+voo.getStatus().toUpperCase());
-            } 
-            else
-            {
-                System.out.println("Erro: O voo já está no status máximo (DECOLOU) e não pode avançar.");
-            } 
-        }
+                String proximo = voo.getProximoStatus();
+            
+                if (proximo == null)
+                {
+                    System.out.println("Erro: O voo " + numeroVoo + " ja decolou e nao possui proximo status.");
+                }
+                else
+                {
+                    System.out.println("Status atual:   " + voo.getStatus().toUpperCase());
+                    System.out.println("Proximo status: " + proximo.toUpperCase());
+                    String resposta = Utils.lerString(teclado, "Confirmar a alteracao? (S/N): ");
+            
+                    if (resposta.trim().equalsIgnoreCase("S"))
+                    {
+                        Aeroporto.atualizarStatus(numeroVoo);
+                        System.out.println("Status atualizado com sucesso!!");
+                        System.out.println("Status atual: " + voo.getStatus().toUpperCase());
+                    }
+                    else
+                    {
+                        System.out.println("Operacao cancelada.");
+                    }
+                }
+            }
         
         Utils.pausar(2);
         return;

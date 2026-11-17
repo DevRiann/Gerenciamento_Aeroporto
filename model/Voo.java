@@ -6,7 +6,7 @@ import helper.Utils;
 
 public class Voo 
 {
-    private int numeroVoo;
+    private String numeroVoo;
     private String companhia;
     private LocalTime embarque;
     private LocalTime desembarque;
@@ -14,7 +14,7 @@ public class Voo
     private static final String[] status = {"previsto", "confirmado", "embarque em curso", "embarque encerrado", "decolou"};
     private int posicaoStatus;
 
-    public Voo (int numeroVoo, String companhia, LocalTime embarque, LocalTime desembarque, String destino)
+    public Voo (String numeroVoo, String companhia, LocalTime embarque, LocalTime desembarque, String destino)
     {
         this.numeroVoo = numeroVoo;
         this.companhia = companhia;
@@ -25,10 +25,7 @@ public class Voo
     }
     
     
-    public void setNumeroVoo(int numeroVoo) {
-        this.numeroVoo = numeroVoo;
-    }
-    public int getNumeroVoo() {
+    public String getNumeroVoo() {
         return numeroVoo;
     }
     public void setCompanhia(String companhia) {
@@ -64,6 +61,25 @@ public class Voo
     public int getPosicaoStatus() {
         return posicaoStatus;
     }
+
+    public boolean avancarStatus()
+{
+    if (posicaoStatus >= status.length - 1)
+    {
+        return false; // já está em DECOLOU
+    }
+    posicaoStatus++;
+    return true;
+}
+
+public String getProximoStatus()
+{
+    if (posicaoStatus >= status.length - 1)
+    {
+        return null; // não existe próximo
+    }
+    return status[posicaoStatus + 1];
+}
 
     @Override
     public String toString() 
