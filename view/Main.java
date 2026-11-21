@@ -58,7 +58,7 @@ public class Main
                     atualizarStatusVoos();
                     break;
                 case 6:
-                    // deletarVoos();
+                    deletarVoos();
                     break;
                 case 7:
                     System.out.println("Volte Sempre!!");
@@ -235,5 +235,48 @@ public class Main
         Utils.pausar(2);
         return;
 
+        }
+        public static void deletarVoos() {
+
+        System.out.println();
+        System.out.println("EXCLUIR VOO");
+
+        String numeroVoo = Utils.lerString(
+        teclado, "Digite o numero do voo: "
+        ).trim();
+
+        Voo voo = Aeroporto.localizarVoo(numeroVoo);
+
+            if (voo == null) {
+            System.out.println("Erro: Voo nao encontrado.");
+        }
+
+            else if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) {
+            System.out.println("Erro: Nao e permitido excluir um voo que ainda nao decolou.");
+        }
+
+            else {
+            System.out.println("Voo encontrado: " + voo.getNumeroVoo());
+            System.out.println("Destino: " + voo.getDestino());
+
+        String resposta = Utils.lerString(
+        teclado, "Deseja realmente excluir este voo? (S/N): "
+        );
+
+            if (resposta.equalsIgnoreCase("S")) {
+
+            if (Aeroporto.excluir(numeroVoo)) {
+            System.out.println("Voo excluido com sucesso!");
+            } else {
+            System.out.println("Erro ao excluir o voo.");
+            }
+
+            } else {
+            System.out.println("Operacao cancelada.");
+            }
+            }
+
+        Utils.pausar(2);
     }
 }
+

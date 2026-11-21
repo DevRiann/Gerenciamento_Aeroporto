@@ -20,25 +20,21 @@ public class Aeroporto
         voos.add(voo);
     }
     
-        public static boolean excluir(int numeroVoo) {
-        Voo voo = localizarVoo(numeroVoo);
-        
-            //O voo existe?
-            if (voo == null) {
-                return false;
-    }
-        
-            //Vê se o voo já decolocou
-            if (!voo.getStatus().equalsIgnoreCase("decolou")) {
-                return false;
-    }
-        
-            //Remove o voo da lista
-            voos.remove(voo);
-        
-            return true;
-        }
+    public static boolean excluir(String numeroVoo) {
+    Voo voo = localizarVoo(numeroVoo);
 
+    if (voo == null) {
+        return false;
+    }
+
+    if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) {
+        return false;
+    }
+
+    voos.remove(voo);
+
+    return true;
+    }
 
     // ---------------------------------------------------------------
     // Lista de Voos (encapsulamento)
