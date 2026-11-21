@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalTime;
 
-import helper.Utils;
 
 public class Voo 
 {
@@ -63,34 +62,22 @@ public class Voo
     }
 
     public boolean avancarStatus()
-{
-    if (posicaoStatus >= status.length - 1)
     {
-        return false; // já está em DECOLOU
+        if (posicaoStatus >= status.length - 1)
+        {
+            return false; // já está em DECOLOU
+        }
+        posicaoStatus++;
+        return true;
     }
-    posicaoStatus++;
-    return true;
-}
 
-public String getProximoStatus()
-{
-    if (posicaoStatus >= status.length - 1)
+    public String getProximoStatus()
     {
-        return null; // não existe próximo
-    }
-    return status[posicaoStatus + 1];
-}
-
-    @Override
-    public String toString() 
-    {
-        return 
-                ""+this.getNumeroVoo()+
-                " "+this.getCompanhia()+
-                " "+ Utils.timeParaString(this.getEmbarque())+
-                " " + Utils.timeParaString(this.getDesembarque())+
-                " "+this.getDestino()+
-                " "+this.getStatus();    
+        if (posicaoStatus >= status.length - 1)
+        {
+            return null; // não existe próximo
+        }
+        return status[posicaoStatus + 1];
     }
 
 }

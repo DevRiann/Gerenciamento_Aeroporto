@@ -25,7 +25,7 @@ public class Main
             System.out.println("========================================");
             System.out.println("1. Cadastrar novo voo");
             System.out.println("2. Consultar painel de voos");
-             System.out.println("3. Consultar um voo especifico ");
+            System.out.println("3. Consultar um voo especifico ");
             System.out.println("4. Alterar informações de um voo");
             System.out.println("5. Alterar o status de um voo");
             System.out.println("6. Excluir um voo");
@@ -34,10 +34,11 @@ public class Main
 
             try 
             {
-            opcao = Integer.parseInt(teclado.nextLine());
+                opcao = Integer.parseInt(teclado.nextLine());
             } 
             catch (NumberFormatException e) {
-            Utils.pausar(2);
+                opcao = 0;
+                Utils.pausar(2);
             }
 
             switch (opcao) 
@@ -77,10 +78,12 @@ public class Main
         System.out.println();
         System.out.println("Cadastrando um novo Voo");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo (ex.: LA3456): ").trim().toUpperCase();
-        while (Aeroporto.localizarVoo(numeroVoo) != null){
+        while (Aeroporto.localizarVoo(numeroVoo) != null)
+        {
             System.out.println("Erro: ja existe um voo com o numero " + numeroVoo);
             numeroVoo = Utils.lerString(teclado, "Digite outro numero de voo: ").trim().toUpperCase();
         }
+
         String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ");
         LocalTime embarque = Utils.lerHorario(teclado, "Digite o Horario de Embarque (no formato HH:mm): ");
         LocalTime desembarque = Utils.lerHorario(teclado, "Digite o Horario de Desembarque (no formato HH:mm): ");
@@ -116,6 +119,8 @@ public class Main
         System.out.println("--------------------------");
         System.out.println();
 
+        Aeroporto.ordenarVoo(); // Ordenar voo por ordem de Embarque
+
         System.out.printf(formato, "ID", "COMPANHIA AEREA", "EMBARQUE", "DESEMBARQUE", "DESTINO", "STATUS");
         for (Voo voo : Aeroporto.getVoos())
         {
@@ -126,6 +131,11 @@ public class Main
 
         System.out.println();
         System.out.println("Total de voos: " + Aeroporto.getVoos().size());
+        System.out.println("Voos com status (Previsto): " + Aeroporto.contarStatus("previsto"));
+        System.out.println("Voos com status (Confirmado): " + Aeroporto.contarStatus("confirmado"));
+        System.out.println("Voos com status (Embarque em Curso): " + Aeroporto.contarStatus("embarque em curso"));
+        System.out.println("Voos com status (Embarque Encerrado): " + Aeroporto.contarStatus("embarque encerrado"));
+        System.out.println("Voos com status (Decolou): " + Aeroporto.contarStatus("decolou"));
         System.out.println("Pressione [Enter] para voltar ao Menu");
         teclado.nextLine(); // espera o usuario apertar Enter
         return;
@@ -156,7 +166,6 @@ public class Main
             System.out.println("Destino:             " + voo.getDestino().toUpperCase());
             System.out.println("Status:              " + voo.getStatus().toUpperCase());
             System.out.println("--------------------------");
-            System.out.println("Consulta realizada com sucesso!");
         }
         Utils.pausar(2);
         return;
@@ -183,7 +192,7 @@ public class Main
         // Valida o êxito da atualização do voo e exibe na tela
         if (Aeroporto.atualizar(numeroVoo, companhia, Utils.timeParaString(novoEmbarque), Utils.timeParaString(novoDesembarque), destino)) 
         {
-            System.out.println("Sucesso: Dados do voo " + numeroVoo + " atualizados com sucesso.");
+            System.out.println("Dados do voo " + numeroVoo + " atualizados com sucesso!!");
             
         } 
         else 
@@ -236,47 +245,53 @@ public class Main
         return;
 
         }
-        public static void deletarVoos() {
+        public static void deletarVoos()
+        {
 
-        System.out.println();
-        System.out.println("EXCLUIR VOO");
+            System.out.println();
+            System.out.println("EXCLUIR VOO");
 
-        String numeroVoo = Utils.lerString(
-        teclado, "Digite o numero do voo: "
-        ).trim();
+            String numeroVoo = Utils.lerString(
+            teclado, "Digite o numero do voo: "
+            ).trim();
 
-        Voo voo = Aeroporto.localizarVoo(numeroVoo);
+            Voo voo = Aeroporto.localizarVoo(numeroVoo);
 
-            if (voo == null) {
-            System.out.println("Erro: Voo nao encontrado.");
+            if (voo == null) 
+            {
+                System.out.println("Erro: Voo nao encontrado.");
+            }
+
+            else if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) 
+            {
+                System.out.println("Erro: Nao e permitido excluir um voo que ainda nao decolou.");
+            }
+
+            else 
+            {
+                System.out.println("Voo encontrado: " + voo.getNumeroVoo().toUpperCase());
+                System.out.println("Destino: " + voo.getDestino().toUpperCase());
+
+                String resposta = Utils.lerString(
+                teclado, "Deseja realmente excluir este voo? (S/N): "
+                );
+
+                if (resposta.equalsIgnoreCase("S")) 
+                {
+                    if (Aeroporto.excluir(numeroVoo)) 
+                    {
+                        System.out.println("Voo excluido com sucesso!");
+                    } else {
+                        System.out.println("Erro ao excluir o voo.");
+                    }
+
+                } 
+                else 
+                {
+                    System.out.println("Operacao cancelada.");
+                }
+            }
+
+            Utils.pausar(2);
         }
-
-            else if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) {
-            System.out.println("Erro: Nao e permitido excluir um voo que ainda nao decolou.");
-        }
-
-            else {
-            System.out.println("Voo encontrado: " + voo.getNumeroVoo());
-            System.out.println("Destino: " + voo.getDestino());
-
-        String resposta = Utils.lerString(
-        teclado, "Deseja realmente excluir este voo? (S/N): "
-        );
-
-            if (resposta.equalsIgnoreCase("S")) {
-
-            if (Aeroporto.excluir(numeroVoo)) {
-            System.out.println("Voo excluido com sucesso!");
-            } else {
-            System.out.println("Erro ao excluir o voo.");
-            }
-
-            } else {
-            System.out.println("Operacao cancelada.");
-            }
-            }
-
-        Utils.pausar(2);
-    }
 }
-

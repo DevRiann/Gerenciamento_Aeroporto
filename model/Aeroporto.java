@@ -1,11 +1,10 @@
 package model;
 
+import helper.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import helper.Utils;
-
 
 public class Aeroporto 
 {
@@ -19,22 +18,6 @@ public class Aeroporto
     {
         voos.add(voo);
     }
-    
-    public static boolean excluir(String numeroVoo) {
-    Voo voo = localizarVoo(numeroVoo);
-
-    if (voo == null) {
-        return false;
-    }
-
-    if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) {
-        return false;
-    }
-
-    voos.remove(voo);
-
-    return true;
-    }
 
     // ---------------------------------------------------------------
     // Lista de Voos (encapsulamento)
@@ -43,6 +26,15 @@ public class Aeroporto
     public static List<Voo> getVoos()
     {
        return Collections.unmodifiableList(voos); 
+    }
+
+    // ---------------------------------------------------------------
+    // ORDENAR VOOS POR ORDEM DE EMBARQUE
+    // Pega a lista e comparar o horario de embarque, em ordem crescente
+    // ---------------------------------------------------------------
+    public static void ordenarVoo()
+    {
+        voos.sort(Comparator.comparing(Voo::getEmbarque));
     }
 
     // ---------------------------------------------------------------
@@ -67,14 +59,17 @@ public class Aeroporto
     // ---------------------------------------------------------------
     public static boolean atualizar (String numero, String novaCompanhia, String novoEmbarque, String novoDesembarque, String novoDestino) {
         Voo voo = localizarVoo(numero);
-        if (voo == null) {
+        if (voo == null) 
+        {
             return false;
         }
 
-        if (voo.getStatus().equalsIgnoreCase("DECOLOU")) {
+        if (voo.getStatus().equalsIgnoreCase("DECOLOU")) 
+        {
             return false;
         } 
-        else{
+        else
+        {
             voo.setCompanhia(novaCompanhia);
             voo.setEmbarque(Utils.stringParaLocalTime(novoEmbarque));
             voo.setDesembarque(Utils.stringParaLocalTime(novoDesembarque));
@@ -96,6 +91,46 @@ public class Aeroporto
             return false;
         }
         return voo.avancarStatus();
+    }
+
+    // ---------------------------------------------------------------
+    // EXCLUIR VOOS
+    // Processamento para excluir dados do voo
+    // ---------------------------------------------------------------
+    public static boolean excluir(String numeroVoo)
+    {
+        Voo voo = localizarVoo(numeroVoo);
+
+        if (voo == null) 
+        {
+            return false;
+        }
+
+        if (!voo.getStatus().equalsIgnoreCase("DECOLOU")) 
+        {
+            return false;
+        }
+
+        voos.remove(voo);
+
+        return true;
+    }
+
+    // ---------------------------------------------------------------
+    // EXIBIR QUANTIDADE DE VOOS POR STATUS
+    // Verificar toda lista e gerar um contador por status
+    // ---------------------------------------------------------------
+    public static int contarStatus (String status)
+    {
+        int quantidade = 0;
+        for (Voo voo : Aeroporto.getVoos())
+        {
+            if (voo.getStatus().equals(status)) 
+            {
+                quantidade++;
+            }
+        }
+        return quantidade;
     }
 }
 

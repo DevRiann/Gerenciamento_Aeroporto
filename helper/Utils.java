@@ -46,7 +46,7 @@ public class Utils
 
     }
 
-    // Obrigacao de preenchimento dos campos
+    // Obrigação do preenchimento dos campos
     public static String lerString(Scanner entrada, String pergunta)
     {
         String texto = "";
@@ -63,7 +63,7 @@ public class Utils
         return texto;
     }
 
-    // Metodo para pausar o programa em alguns segundos
+    // Método para pausar o programa em alguns segundos
     public static void pausar(int segundos)
     {
         try {
