@@ -80,10 +80,10 @@ public class Main
         System.out.println();
         System.out.println("Cadastrando um novo Voo");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo (ex.: LA3456): ").trim().toUpperCase();
-        String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ");
+        String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ").trim().toUpperCase();
         LocalTime embarque = Utils.lerHorario(teclado, "Digite o Horario de Embarque (no formato HH:mm): ");
         LocalTime desembarque = Utils.lerHorario(teclado, "Digite o Horario de Desembarque (no formato HH:mm): ");
-        String destino = Utils.lerString(teclado, "Digite o destino: ");
+        String destino = Utils.lerString(teclado, "Digite o destino: ").trim().toUpperCase();
 
         Voo voo = new Voo(numeroVoo, companhia, embarque, desembarque, destino);
         
@@ -142,6 +142,7 @@ public class Main
         System.out.println();
         System.out.println("CONSULTAR VOO");
         System.out.println("Buscar por: \n[1] - Numero do Voo \n[2] - Companhia Aerea \n[3] - Destino");
+        System.out.print("Escolha uma opcao: ");
 
         try{
             opcao = Integer.parseInt(teclado.nextLine());
@@ -179,41 +180,14 @@ public class Main
                 break;
             case 2:
                 String companhia = Utils.lerString(teclado, "Digite a companhia: ").trim().toUpperCase();
-                Voo vooCompanhia = Aeroporto.localizarCompanhia(companhia);
 
-                if (vooCompanhia == null)
+                if (Aeroporto.localizarCompanhia(companhia) == null)
                 {
                     System.out.println("Companhia " + companhia + " nao encontrado. Consulta nao realizada.");
                 }
                 else
                 {
-                    for (int i = 0; i < Aeroporto.getVoos().size(); i++) 
-                    {
-                        System.out.println("--------------------------");
-                        System.out.println("Numero do voo:       " + vooCompanhia.getNumeroVoo());
-                        System.out.println("Companhia aerea:     " + vooCompanhia.getCompanhia().toUpperCase());
-                        System.out.println("Horario embarque:    " + Utils.timeParaString(vooCompanhia.getEmbarque()).toUpperCase());
-                        System.out.println("Horario desembarque: " + Utils.timeParaString(vooCompanhia.getDesembarque()).toUpperCase());
-                        System.out.println("Destino:             " + vooCompanhia.getDestino().toUpperCase());
-                        System.out.println("Status:              " + vooCompanhia.getStatus().toUpperCase());
-                        System.out.println("--------------------------");   
-                    }
-                }
-                Utils.pausar(2);
-                break;
-            case 3:
-            String destino = Utils.lerString(teclado, "Digite o destino: ").trim().toUpperCase();
-            Voo vooDestino = Aeroporto.localizarCompanhia(destino);
-
-            if (vooDestino == null)
-            {
-                System.out.println("Companhia " + destino + " nao encontrado. Consulta nao realizada.");
-            }
-            else
-            {
-                for (Voo voo : Aeroporto.getVoos()) 
-                {
-                    if (voo.getCompanhia().equals(destino))
+                    for (Voo voo : Aeroporto.localizarCompanhia(companhia)) 
                     {
                         System.out.println("--------------------------");
                         System.out.println("Numero do voo:       " + voo.getNumeroVoo());
@@ -222,8 +196,30 @@ public class Main
                         System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
                         System.out.println("Destino:             " + voo.getDestino().toUpperCase());
                         System.out.println("Status:              " + voo.getStatus().toUpperCase());
-                        System.out.println("--------------------------");
+                        System.out.println("--------------------------");   
                     }
+                }
+                Utils.pausar(2);
+                break;
+            case 3:
+            String destino = Utils.lerString(teclado, "Digite o destino: ").trim().toUpperCase();
+
+            if (Aeroporto.localizarDestino(destino) == null)
+            {
+                System.out.println("Companhia " + destino + " nao encontrado. Consulta nao realizada.");
+            }
+            else
+            {
+                for (Voo voo : Aeroporto.localizarDestino(destino)) 
+                {
+                    System.out.println("--------------------------");
+                    System.out.println("Numero do voo:       " + voo.getNumeroVoo());
+                    System.out.println("Companhia aerea:     " + voo.getCompanhia().toUpperCase());
+                    System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()).toUpperCase());
+                    System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
+                    System.out.println("Destino:             " + voo.getDestino().toUpperCase());
+                    System.out.println("Status:              " + voo.getStatus().toUpperCase());
+                    System.out.println("--------------------------");   
                 }
             }
             Utils.pausar(2);

@@ -63,32 +63,34 @@ public class Aeroporto
     // BUSCAR VOOS
     // Procura o voo pelo destino
     // ---------------------------------------------------------------
-    public static Voo localizarDestino(String destino)
+    public static List<Voo> localizarDestino(String destino)
     {
+        ArrayList<Voo> encontrado = new ArrayList<>();
         for (Voo voo : voos)
         {
             if (voo.getDestino().equalsIgnoreCase(destino))
             {
-                return voo;
+                encontrado.add(voo);
             }
         }
-        return null;
+        return encontrado;
     }
 
     // ---------------------------------------------------------------
     // BUSCAR VOOS
     // Procura o voo pela companhia
     // ---------------------------------------------------------------
-    public static Voo localizarCompanhia(String companhia)
+    public static List<Voo> localizarCompanhia(String companhia)
     {
+        ArrayList<Voo> encontrado = new ArrayList<>();
         for (Voo voo : voos)
         {
             if (voo.getCompanhia().equalsIgnoreCase(companhia))
             {
-                return voo;
+                encontrado.add(voo);
             }
         }
-        return null;
+        return encontrado;
     }
     
     // ---------------------------------------------------------------
@@ -151,7 +153,7 @@ public class Aeroporto
     }
 
     // ---------------------------------------------------------------
-    // EXIBIR QUANTIDADE DE VOOS POR STATUS
+    // CONTABILIZAR A QUANTIDADE DE VOOS POR STATUS
     // Verificar toda lista e gerar um contador por status
     // ---------------------------------------------------------------
     public static int contarStatus (String status)
