@@ -14,9 +14,15 @@ public class Aeroporto
     // CADASTRAR VOOS
     // Apenas armazena os dados do voo
     // ---------------------------------------------------------------
-    public static void cadastrar(Voo voo)
+    public static boolean cadastrar(Voo voo)
     {
+        if (localizarVoo(voo.getNumeroVoo())!=null || voo.getDesembarque().compareTo(voo.getEmbarque())<= 0) 
+        {
+            return false;
+        }
+
         voos.add(voo);
+        return true;
     }
 
     // ---------------------------------------------------------------
@@ -52,6 +58,38 @@ public class Aeroporto
         }
         return null;
     }
+
+    // ---------------------------------------------------------------
+    // BUSCAR VOOS
+    // Procura o voo pelo destino
+    // ---------------------------------------------------------------
+    public static Voo localizarDestino(String destino)
+    {
+        for (Voo voo : voos)
+        {
+            if (voo.getDestino().equalsIgnoreCase(destino))
+            {
+                return voo;
+            }
+        }
+        return null;
+    }
+
+    // ---------------------------------------------------------------
+    // BUSCAR VOOS
+    // Procura o voo pela companhia
+    // ---------------------------------------------------------------
+    public static Voo localizarCompanhia(String companhia)
+    {
+        for (Voo voo : voos)
+        {
+            if (voo.getCompanhia().equalsIgnoreCase(companhia))
+            {
+                return voo;
+            }
+        }
+        return null;
+    }
     
     // ---------------------------------------------------------------
     // ATUALIZAR VOOS
@@ -59,15 +97,11 @@ public class Aeroporto
     // ---------------------------------------------------------------
     public static boolean atualizar (String numero, String novaCompanhia, String novoEmbarque, String novoDesembarque, String novoDestino) {
         Voo voo = localizarVoo(numero);
-        if (voo == null) 
+
+        if (voo == null || voo.getDesembarque().compareTo(voo.getEmbarque())<=0 || voo.getStatus().equalsIgnoreCase("DECOLOU")) 
         {
             return false;
         }
-
-        if (voo.getStatus().equalsIgnoreCase("DECOLOU")) 
-        {
-            return false;
-        } 
         else
         {
             voo.setCompanhia(novaCompanhia);
