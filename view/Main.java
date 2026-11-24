@@ -144,15 +144,16 @@ public class Main
         System.out.println("Buscar por: \n[1] - Numero do Voo \n[2] - Companhia Aerea \n[3] - Destino");
         System.out.print("Escolha uma opcao: ");
 
+        int opcaoBusca = 0;
         try{
-            opcao = Integer.parseInt(teclado.nextLine());
+            opcaoBusca = Integer.parseInt(teclado.nextLine());
             Utils.pausar(2);
         } 
         catch (NumberFormatException e){
-            opcao = 0;
+            opcaoBusca = 0;
         }
 
-        switch (opcao) {
+        switch (opcaoBusca) {
             case 1:
                 String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim().toUpperCase();
 
@@ -181,9 +182,9 @@ public class Main
             case 2:
                 String companhia = Utils.lerString(teclado, "Digite a companhia: ").trim().toUpperCase();
 
-                if (Aeroporto.localizarCompanhia(companhia) == null)
+                if (Aeroporto.localizarCompanhia(companhia).isEmpty())
                 {
-                    System.out.println("Companhia " + companhia + " nao encontrado. Consulta nao realizada.");
+                    System.out.println("Companhia " + companhia + " nao encontrada. Consulta nao realizada.");
                 }
                 else
                 {
@@ -204,9 +205,9 @@ public class Main
             case 3:
             String destino = Utils.lerString(teclado, "Digite o destino: ").trim().toUpperCase();
 
-            if (Aeroporto.localizarDestino(destino) == null)
+            if (Aeroporto.localizarDestino(destino).isEmpty())
             {
-                System.out.println("Companhia " + destino + " nao encontrado. Consulta nao realizada.");
+                System.out.println("Destino " + destino + " nao encontrado. Consulta nao realizada.");
             }
             else
             {
