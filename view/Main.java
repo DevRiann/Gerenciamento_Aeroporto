@@ -93,7 +93,7 @@ public class Main
         }
         else 
         {
-            System.out.println("Erro: Tente novamente!! Verifique o numero do Voo e os horarios de embarque e desembarque");
+            System.out.println("Erro: Tente novamente!! Verifique os horarios de embarque e desembarque");
         }
         System.out.println();
         Utils.pausar(2);
@@ -237,22 +237,41 @@ public class Main
         System.out.println();
         System.out.println("Consultar Voo");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim().toUpperCase();
-        String companhia = Utils.lerString(teclado, "Digite a nova Companhia Aerea: ");
-        LocalTime novoEmbarque = Utils.lerHorario(teclado, "Digite o novo Horario de Embarque (no formato HH:mm): ");
-        LocalTime novoDesembarque = Utils.lerHorario(teclado, "Digite o novo Horario de Desembarque (no formato HH:mm): ");
-        String destino = Utils.lerString(teclado, "Digite o novo Destino: ");
 
-        // Valida o êxito da atualização do voo e exibe na tela
-        if (Aeroporto.atualizar(numeroVoo, companhia, Utils.timeParaString(novoEmbarque), Utils.timeParaString(novoDesembarque), destino)) 
+        Voo voo = Aeroporto.localizarVoo(numeroVoo);
+
+        if (voo == null)
         {
-            System.out.println("Dados do voo " + numeroVoo + " atualizados com sucesso!!");
-            
-        } 
-        else 
-        {
-            System.out.println("Erro: Nao foi possivel atualizar o voo numero: " + numeroVoo + ". Verifique novamente o numero e o status.");
+            // Regra de negocio: informar quando o voo nao existe
+            System.out.println("Voo " + numeroVoo + " nao encontrado. Consulta nao realizada.");
         }
+        else
+        {
+            System.out.println("--------------------------");
+            System.out.println("Informacoes sobre o voo numero: "+numeroVoo);
+            System.out.println("Numero do voo:       " + voo.getNumeroVoo());
+            System.out.println("Companhia aerea:     " + voo.getCompanhia().toUpperCase());
+            System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()).toUpperCase());
+            System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
+            System.out.println("Destino:             " + voo.getDestino().toUpperCase());
+            System.out.println("Status:              " + voo.getStatus().toUpperCase());
+            System.out.println("--------------------------");  
+            String companhia = Utils.lerString(teclado, "Digite a nova Companhia Aerea: ");
+            LocalTime novoEmbarque = Utils.lerHorario(teclado, "Digite o novo Horario de Embarque (no formato HH:mm): ");
+            LocalTime novoDesembarque = Utils.lerHorario(teclado, "Digite o novo Horario de Desembarque (no formato HH:mm): ");
+            String destino = Utils.lerString(teclado, "Digite o novo Destino: ");
 
+            // Valida o êxito da atualização do voo e exibe na tela
+            if (Aeroporto.atualizar(numeroVoo, companhia, Utils.timeParaString(novoEmbarque), Utils.timeParaString(novoDesembarque), destino)) 
+            {
+                System.out.println("Dados do voo " + numeroVoo + " atualizados com sucesso!!");
+                
+            } 
+            else 
+            {
+                System.out.println("Erro: Nao foi possivel atualizar o voo!! Verifique os horarios e o status");
+            }
+        }
         Utils.pausar(2);
         return;
     }
