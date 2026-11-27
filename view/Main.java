@@ -62,7 +62,7 @@ public class Main
                     deletarVoos();
                     break;
                 case 7:
-                    System.out.println("Volte Sempre!!");
+                    System.out.println("Muito obrigado, Volte Sempre!!");
                     System.out.println();
                     break;
                 default:
@@ -77,8 +77,7 @@ public class Main
 
     public static void cadastrarVoos()
     {
-        System.out.println();
-        System.out.println("Cadastrando um novo Voo");
+        System.out.println("\nCADASTRANDO UM NOVO VOO");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo (ex.: LA3456): ").trim().toUpperCase();
         String companhia = Utils.lerString(teclado, "Digite a Companhia Aerea: ").trim().toUpperCase();
         LocalTime embarque = Utils.lerHorario(teclado, "Digite o Horario de Embarque (no formato HH:mm): ");
@@ -139,8 +138,7 @@ public class Main
 
     public static void buscarVoos()
     {
-        System.out.println();
-        System.out.println("CONSULTAR VOO");
+        System.out.println("\nCONSULTAR VOO");
         System.out.println("Buscar por: \n[1] - Numero do Voo \n[2] - Companhia Aerea \n[3] - Destino");
         System.out.print("Escolha uma opcao: ");
 
@@ -234,8 +232,7 @@ public class Main
 
     public static void atualizarVoos()
     {
-        System.out.println();
-        System.out.println("Consultar Voo");
+        System.out.println("\nATUALIZAR INFORMAÇOES DO VOO");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim().toUpperCase();
 
         Voo voo = Aeroporto.localizarVoo(numeroVoo);
@@ -247,18 +244,13 @@ public class Main
         }
         else
         {
-            System.out.println("--------------------------");
-            System.out.println("Informacoes sobre o voo numero: "+numeroVoo);
-            System.out.println("Numero do voo:       " + voo.getNumeroVoo());
-            System.out.println("Companhia aerea:     " + voo.getCompanhia().toUpperCase());
-            System.out.println("Horario embarque:    " + Utils.timeParaString(voo.getEmbarque()).toUpperCase());
-            System.out.println("Horario desembarque: " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
-            System.out.println("Destino:             " + voo.getDestino().toUpperCase());
-            System.out.println("Status:              " + voo.getStatus().toUpperCase());
-            System.out.println("--------------------------");  
+            System.out.println("\nCompanhia aerea (atual):     " + voo.getCompanhia().toUpperCase());
             String companhia = Utils.lerString(teclado, "Digite a nova Companhia Aerea: ");
+            System.out.println("\nHorario de embarque (atual): " + Utils.timeParaString(voo.getEmbarque()).toUpperCase());
             LocalTime novoEmbarque = Utils.lerHorario(teclado, "Digite o novo Horario de Embarque (no formato HH:mm): ");
+            System.out.println("\nHorario de desembarque (atual): " + Utils.timeParaString(voo.getDesembarque()).toUpperCase());
             LocalTime novoDesembarque = Utils.lerHorario(teclado, "Digite o novo Horario de Desembarque (no formato HH:mm): ");
+            System.out.println("\nDestino (atual): " + voo.getDestino().toUpperCase()); 
             String destino = Utils.lerString(teclado, "Digite o novo Destino: ");
 
             // Valida o êxito da atualização do voo e exibe na tela
@@ -278,8 +270,7 @@ public class Main
 
     public static void atualizarStatusVoos()
     {
-        System.out.println("");
-        System.out.println("ATUALIZAR O STATUS DO VOO");
+        System.out.println("\nATUALIZAR O STATUS DO VOO");
         String numeroVoo = Utils.lerString(teclado, "Digite o numero do voo: ").trim();
 
         Voo voo = Aeroporto.localizarVoo(numeroVoo);
@@ -320,8 +311,7 @@ public class Main
 
     public static void deletarVoos()
     {
-        System.out.println();
-        System.out.println("EXCLUIR VOO");
+        System.out.println("\nEXCLUIR VOO");
         String numeroVoo = Utils.lerString(
         teclado, "Digite o numero do voo: "
         ).trim().toUpperCase();
